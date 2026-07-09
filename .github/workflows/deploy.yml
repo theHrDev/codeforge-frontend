@@ -1,0 +1,21 @@
+name: Deploy frontend
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to appleboy and deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          key: ${{ secrets.KEY }}
+          script: |
+            cd ~/forge/frontend
+            git pull origin main
+            cd ~/forge
+            docker compose up -d --build
